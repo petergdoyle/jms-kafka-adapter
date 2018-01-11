@@ -103,14 +103,16 @@ local_kafka_dir=$local_dir/kafka
 local_maven_dir=$local_dir/maven
 local_java_dir=$local_dir/java
 
-echo -e $BOLD$BLUE"[info] "'$local_dir='$local_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$docker_dir='$docker_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$install_dir'=$install_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$keystore_dir='$keystore_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$data_dir='$data_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$kafka_dir='$kafka_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$kafka_config_dir='$kafka_config_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$utils_dir'=$utils_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$local_kafka_dir'=$local_kafka_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$local_maven_dir='$local_maven_dir$RESET
-echo -e $BOLD$BLUE"[info] "'$local_java_dir='$local_java_dir$RESET
+kafka_installation_dir="$local_kafka_dir/kafka_$scala_version-$kafka_version"
+
+# echo -e $BOLD$BLUE"[info] "'$local_dir='$local_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$docker_dir='$docker_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$install_dir'=$install_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$keystore_dir='$keystore_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$data_dir='$data_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$kafka_dir='$kafka_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$kafka_config_dir='$kafka_config_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$utils_dir'=$utils_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$local_kafka_dir'=$local_kafka_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$local_maven_dir='$local_maven_dir$RESET
+# echo -e $BOLD$BLUE"[info] "'$local_java_dir='$local_java_dir$RESET

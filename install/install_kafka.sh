@@ -11,7 +11,7 @@ kafka_base_location=$local_kafka_dir
 if [ ! -d $kafka_base_location ]; then
   mkdir -pv $kafka_base_location
 fi
-kafka_installation_dir="$kafka_base_location/kafka_$scala_version-$kafka_version"
+
 downloadable="kafka_$scala_version-$kafka_version.tgz"
 kafka_home=$kafka_base_location/default
 
@@ -55,6 +55,8 @@ if [ ! -d $kafka_installation_dir ]; then
     mkdir -pv $kafka_installation_dir/config/orig
     cp -fv $kafka_installation_dir/config/* $kafka_installation_dir/config/orig
   fi
+
+  cp -fv $kafka_config_dir/$kafka_version/* $kafka_installation_dir/config
 
 else
   display_info "kafka-$kafka_version already appears to be installed. skipping."
