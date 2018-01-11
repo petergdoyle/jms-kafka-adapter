@@ -9,7 +9,6 @@ import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
-import javax.jms.MessageListener;
 import javax.jms.Queue;
 import javax.jms.Session;
 import javax.jms.TextMessage;
@@ -17,7 +16,7 @@ import javax.jms.TextMessage;
 /**
  *
  */
-public class JmsMessageReceiver implements MessageListener {
+public class JmsMessageReceiver implements MqKafkaAdapter {
 
     private final ConnectionFactory factory;
     private final String queueName;
@@ -48,9 +47,9 @@ public class JmsMessageReceiver implements MessageListener {
                 TextMessage msg = (TextMessage) message;
                 String text;
                 text = msg.getText();
-                kafkaMessageSender.send(text);
                 System.out.printf("Message received: %s, Thread: %s%n", text, Thread.currentThread().getName());
-            } catch (JMSException ex) {
+                kafkaMessageSender.send(text);
+            } catch (Exception ex) {
                 Logger.getLogger(JmsMessageReceiver.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
