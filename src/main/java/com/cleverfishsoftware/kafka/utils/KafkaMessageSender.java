@@ -2,18 +2,26 @@
  */
 package com.cleverfishsoftware.kafka.utils;
 
+import java.util.Properties;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerRecord;
+
 /**
  *
  */
 public class KafkaMessageSender {
 
-    final private String msg;
+    private final Properties properties;
+    private final String topic;
+    private final KafkaProducer<String, String> producer;
 
-    public KafkaMessageSender(String msg) {
-        this.msg = msg;
+    public KafkaMessageSender(final Properties properties, final String topic) {
+        this.properties = properties;
+        this.topic = topic;
+        this.producer = new KafkaProducer<>(properties);
     }
 
-    public void send() {
-        System.out.println(msg);
+    public void send(final String msg) {
+        producer.send(new ProducerRecord<>(topic, msg));
     }
 }

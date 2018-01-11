@@ -91,13 +91,13 @@ scala_version="2.11"
 kafka_version="0.10.2.1"
 maven_version='3.3.9'
 
-local_dir=$project_dir/local
+local_dir=$project_dir/usr
 docker_dir=$project_dir/docker
 install_dir=$project_dir/install
 keystore_dir=$project_dir/keystore
 data_dir=$project_dir/data
 kafka_dir=$project_dir/kafka
-kafka_config_dir=$kafka_dir/config
+kafka_config_dir=$install_dir/config/kafka
 utils_dir=$project_dir/utils
 local_kafka_dir=$local_dir/kafka
 local_maven_dir=$local_dir/maven

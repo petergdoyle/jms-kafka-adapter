@@ -21,45 +21,41 @@ if [ ! -d $kafka_installation_dir ]; then
     rm -fv $kafka_home
   fi
 
-  kafka_link_file=$kafka_config_dir/$kafka_version/link
-  if [ ! -f $kafka_link_file ]; then
-    display_error "Cannot find a link file in location $kafka_config_dir/$kafka_version/link. Add a link file that contains the downloadable kafka url specific to $downloadable. Cannot continue"
-    exit 1
-  fi
-  download_url=`cat $kafka_link_file`
-  display_info "Verifying url $download_url..."
+ if [ ! -f /tmp/$downloadable ]; then
+    kafka_link_file=$kafka_config_dir/$kafka_version/link
+    if [ ! -f $kafka_link_file ]; then
+      display_error "Cannot find a link file in location $kafka_config_dir/$kafka_version/link. Add a link file that contains the downloadable kafka url specific to $downloadable. Cannot continue"
+      exit 1
+    fi
+    download_url=`cat $kafka_link_file`
+    display_info "Verifying url $download_url..."
 
-  if ! `validate_url $download_url`; then
-    display_error "Bad url specified as $download_url. Server returned $response_code. Check link. Cannot continue"
-    exit 1
+    if ! `validate_url $download_url`; then
+      display_error "Bad url specified as $download_url. Server returned $response_code. Check link. Cannot continue"
+      exit 1
+    fi
+
+    display_info "Downloading kafka to $kafka_base_location..."
+    curl -o /tmp/$downloadable $download_url
   fi
 
-  display_info "Downloading kafka to $kafka_base_location..."
-  curl -O $download_url \
-  && tar -xvf $downloadable -C $kafka_base_location \
-  && rm -f $downloadable
+  tar -xvf /tmp/$downloadable -C $kafka_base_location
 
   ln -vs $kafka_installation_dir $kafka_home
 
   export KAFKA_HOME=$kafka_home
   if ! grep -q KAFKA_HOME ~/.bash_profile; then
-    cat >>~/.bash_profile <<-EOF
-export KAFKA_HOME=$KAFKA_HOME
-export PATH=\$PATH:\$KAFKA_HOME/bin
-EOF
+    sed -i "s@^PATH=@KAFKA_HOME=$KAFKA_HOME\n&@" ~/.bash_profile
+    sed -i '/^PATH=/ s/$/:$KAFKA_HOME\/bin/' ~/.bash_profile
+    display_warn "$jdk_version has been installed and KAFKA_HOME is set to $KAFKA_HOME. Please source your ~/.bash_profile to include KAFKA_HOME/bin your PATH"
   fi
+
   if [ ! -d $kafka_installation_dir/config/orig ]; then
     display_info "making copy of the original config files..."
     mkdir -pv $kafka_installation_dir/config/orig
     cp -fv $kafka_installation_dir/config/* $kafka_installation_dir/config/orig
   fi
 
+else
+  display_info "kafka-$kafka_version already appears to be installed. skipping."
 fi
-
-  display_info "Kafka $kafka_version is now installed at $kafka_installation_dir and symlinked at $kafka_base_location/default"
-
-  display_info "Kafka $kafka_version configuration files are located at $kafka_runtime_config_dir"
-
-  display_info "Kafka $kafka_version console logs are located at $kafka_runtime_console_logs_dir"
-
-  display_info "Kafka $kafka_version has been installed. Please source your ~/.bash_profile.sh."

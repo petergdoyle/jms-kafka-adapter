@@ -21,11 +21,13 @@ public class JmsMessageReceiver implements MessageListener {
 
     private final ConnectionFactory factory;
     private final String queueName;
+    private final KafkaMessageSender kafkaMessageSender;
     private Connection connection = null;
 
-    public JmsMessageReceiver(final ConnectionFactory factory, String queueName) {
+    public JmsMessageReceiver(final ConnectionFactory factory, final String queueName, final KafkaMessageSender kafkaMessageSender) {
         this.factory = factory;
         this.queueName = queueName;
+        this.kafkaMessageSender = kafkaMessageSender;
     }
 
     public void startListener() throws JMSException {
@@ -46,7 +48,7 @@ public class JmsMessageReceiver implements MessageListener {
                 TextMessage msg = (TextMessage) message;
                 String text;
                 text = msg.getText();
-                new KafkaMessageSender(text).send();
+                kafkaMessageSender.send(text);
                 System.out.printf("Message received: %s, Thread: %s%n", text, Thread.currentThread().getName());
             } catch (JMSException ex) {
                 Logger.getLogger(JmsMessageReceiver.class.getName()).log(Level.SEVERE, null, ex);
